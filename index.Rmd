@@ -1,0 +1,48 @@
+---
+title: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Grit and textbooks  
+A mini-experiment using survey tools and a [personality assessment instrument](https://angeladuckworth.com/grit-scale/) to explore grit and textbook reading patterns.
+
+#### Data
+Data from Angela Duckworth Grit test and a Google Form to capture reading accomplishments in experimental design.
+
+```{r}
+library(tidyverse)
+library(gsheet)
+data <- gsheet2tbl('docs.google.com/spreadsheets/d/1TgbQhTV8hjj75bdC6DtpVZjsUwWpieA1pFVCkKFF8_M') %>% 
+  select(-1) %>% 
+  rename(grit = 1, reading = 2, joy = 3)
+
+write_csv(data, "data/data.csv")
+
+```
+
+#### Viz
+```{r}
+ggplot(data, aes(grit, reading)) +
+  geom_point() +
+  geom_smooth(size = 2, color = "seagreen") +
+  labs(x = "grit score", y = "textbook completion")
+
+ggplot(data, aes(grit, joy)) +
+  geom_point() +
+  geom_smooth(size = 2, color = "orange") +
+  labs(x = "grit score", y = "textbook satisfaction") +
+  ylim(1,5)
+
+ggplot(data, aes(joy)) +
+  geom_histogram() +
+  labs(x = "textbook satisfaction") +
+  xlim(1,5)
+
+
+```
+
+
